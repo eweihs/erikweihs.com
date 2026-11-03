@@ -1,0 +1,21 @@
+/* TEAM */
+Developer: Erik Weihs
+Role: Solution Architect & Engineering Lead
+Contact: hello@erikweihs.com
+GitHub: https://github.com/eweihs
+LinkedIn: https://www.linkedin.com/in/erik-weihs/
+From: Amsterdam, the Netherlands
+
+/* SITE */
+Last update: 2026/11/03
+Language: English
+Standards: HTML5, CSS3, TypeScript
+Components: Next.js, React, Tailwind CSS
+Fonts: Fraunces, DM Sans
+Hosting: AWS S3 and CloudFront, deployed with GitHub Actions
+Analytics: Umami, without cookies
+Source: https://github.com/eweihs/erikweihs.com
+
+/* OUTSIDE WORK */
+Usually out running along the canals.
+First marathon: Amsterdam, October 2026, 4:03:38.

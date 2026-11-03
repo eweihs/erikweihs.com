@@ -1,0 +1,85 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to deploy
+        type: choice
+        options: [dev, prod]
+        default: dev
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: deploy-${{ inputs.environment || 'dev' }}
+
+jobs:
+  deploy:
+    name: Deploy to ${{ inputs.environment || 'dev' }}
+    runs-on: ubuntu-latest
+    env:
+      DEPLOY_ENV: ${{ inputs.environment || 'dev' }}
+      BUCKET: erik-weihs-website-${{ inputs.environment || 'dev' }}
+      STACK: ${{ inputs.environment == 'prod' && 'FrontendStackProd' || 'FrontendStackDev' }}
+      # HTML and other unhashed files are cached by CloudFront until the next invalidation
+      REVALIDATE: public, max-age=0, s-maxage=31536000, must-revalidate
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          ENV: ${{ env.DEPLOY_ENV }}
+
+      - uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/erik-weihs-website-deploy-${{ env.DEPLOY_ENV }}
+          aws-region: eu-west-1
+
+      - name: Upload HTML and assets
+        run: |
+          aws s3 sync out/ "s3://$BUCKET/" \
+            --delete \
+            --exclude "_next/static/*" \
+            --cache-control "$REVALIDATE"
+
+      # The static export writes these routes as extensionless PNG files
+      - name: Fix content type of image routes
+        run: |
+          for file in opengraph-image logo; do
+            aws s3 cp "out/$file" "s3://$BUCKET/$file" \
+              --content-type "image/png" \
+              --cache-control "$REVALIDATE"
+          done
+
+      # Content-hashed, so safe to cache forever; no --delete, so pages still cached
+      # by browsers can load the assets they reference
+      - name: Upload immutable static assets
+        run: |
+          aws s3 sync out/_next/static/ "s3://$BUCKET/_next/static/" \
+            --cache-control "public, max-age=31536000, immutable"
+
+      - name: Invalidate CloudFront cache
+        run: |
+          distribution_id=$(aws cloudformation describe-stacks \
+            --stack-name "$STACK" \
+            --query "Stacks[0].Outputs[?OutputKey=='DistributionId'].OutputValue" \
+            --output text)
+          if [ -z "$distribution_id" ] || [ "$distribution_id" = "None" ]; then
+            echo "::error::No DistributionId output on $STACK"
+            exit 1
+          fi
+          aws cloudfront create-invalidation --distribution-id "$distribution_id" --paths "/*" > /dev/null
+          echo "Invalidated CloudFront distribution $distribution_id"
