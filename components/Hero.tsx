@@ -5,7 +5,7 @@ export default function Hero() {
   return (
     <section
       id="top"
-      className="relative flex flex-wrap items-center gap-10 overflow-hidden pt-16 pb-24 md:pt-24 md:pb-32"
+      className="relative flex flex-wrap items-center gap-10 pt-16 pb-24 md:pt-24 md:pb-32"
     >
       <div
         aria-hidden="true"
