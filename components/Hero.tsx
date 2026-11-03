@@ -7,16 +7,7 @@ export default function Hero() {
       id="top"
       className="relative flex flex-wrap items-center gap-14 md:gap-10 pt-16 pb-16 md:pt-24 md:pb-32"
     >
-      {/* 840px is where the photo fits beside the text (560 + 40 gap + 176 + 64 padding),
-          so the watermark and photo switch to their side-by-side positions there too */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute right-0 bottom-[5rem] z-0 translate-y-1/4 font-display text-[290px] leading-[0.85] font-bold text-watermark select-none md:bottom-[6rem] min-[840px]:top-[-1rem] min-[840px]:right-[-2rem] min-[840px]:bottom-auto min-[840px]:translate-y-0 min-[840px]:text-[520px]"
-      >
-        W
-      </div>
-
-      <div className="relative min-w-0 flex-[999_1_560px]">
+      <div className="relative z-10 min-w-0 flex-[999_1_560px]">
         <SectionLabel className="text-amber">
           Solution Architect & Engineering Lead · Amsterdam
         </SectionLabel>
@@ -48,14 +39,25 @@ export default function Hero() {
         </div>
       </div>
 
-      <Image
-        src="/profile.webp"
-        alt="Erik Weihs"
-        width={176}
-        height={176}
-        priority
-        className="relative z-10 mt-4 ml-auto aspect-square w-32 rounded-full border-[6px] border-paper object-cover md:w-44 min-[840px]:mt-0"
-      />
+      {/* The photo is pinned to the W's bottom-right corner, so they move as one.
+          From 840px there is room for the text beside it (560 + 40 gap + 176 + 64 padding),
+          so the pair moves behind the top right of the hero there. */}
+      <div className="relative ml-auto -mt-16 min-[840px]:absolute min-[840px]:top-[-1rem] min-[840px]:right-[-2rem] min-[840px]:mt-0">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none font-display text-[clamp(260px,82vw,360px)] leading-[0.85] font-bold text-watermark select-none min-[840px]:text-[520px]"
+        >
+          W
+        </div>
+        <Image
+          src="/profile.webp"
+          alt="Erik Weihs"
+          width={176}
+          height={176}
+          priority
+          className="absolute right-0 bottom-0 aspect-square w-32 rounded-full border-[6px] border-paper object-cover md:w-44"
+        />
+      </div>
     </section>
   );
 }
