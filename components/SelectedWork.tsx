@@ -9,11 +9,12 @@ const projects = [
     title: "A premium video API",
     description:
       "Designed and delivered a premium video API enabling secure content delivery, entitlement management, and integrated purchase flows across web, mobile, and connected TVs.",
+    detail: "Paid Video · Entitlements · Web · Mobile · Connected TV"
   },
   {
     title: "Ideas into services",
     description:
-      "Turned new ideas into in-house services: designed the proof of concept, onboarded the Web Engineering team, and made sure every one lived up to its promise.",
+      "Turned new ideas into in-house services, from proof of concept through team adoption, ensuring each delivered on its intended value.",
     detail: "AI app hosting · Toplist voting · Image transformation",
   },
 ];
