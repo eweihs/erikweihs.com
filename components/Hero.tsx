@@ -7,9 +7,11 @@ export default function Hero() {
       id="top"
       className="relative flex flex-wrap items-center gap-14 md:gap-10 pt-16 pb-16 md:pt-24 md:pb-32"
     >
+      {/* 840px is where the photo fits beside the text (560 + 40 gap + 176 + 64 padding),
+          so the watermark and photo switch to their side-by-side positions there too */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute right-0 bottom-[5rem] z-0 translate-y-1/4 font-display text-[290px] leading-[0.85] font-bold text-watermark select-none md:top-[-1rem] md:right-[-2.5rem] md:bottom-auto md:translate-y-0 md:text-[520px] min-[768px]:max-[839px]:bottom-[6rem] min-[768px]:max-[839px]:top-auto"
+        className="pointer-events-none absolute right-0 bottom-[5rem] z-0 translate-y-1/4 font-display text-[290px] leading-[0.85] font-bold text-watermark select-none md:bottom-[6rem] min-[840px]:top-[-1rem] min-[840px]:right-[-2rem] min-[840px]:bottom-auto min-[840px]:translate-y-0 min-[840px]:text-[520px]"
       >
         W
       </div>
@@ -52,7 +54,7 @@ export default function Hero() {
         width={176}
         height={176}
         priority
-        className="relative z-10 ml-auto mt-4 aspect-square w-32 rounded-full border-[6px] border-paper object-cover md:ml-auto md:mt-0 md:w-44"
+        className="relative z-10 mt-4 ml-auto aspect-square w-32 rounded-full border-[6px] border-paper object-cover md:w-44 min-[840px]:mt-0"
       />
     </section>
   );
