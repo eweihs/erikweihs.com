@@ -9,7 +9,7 @@ const projects = [
     title: "A premium video API",
     description:
       "Designed and delivered a premium video API enabling secure content delivery, entitlement management, and integrated purchase flows across web, mobile, and connected TVs.",
-    detail: "Paid Video · Entitlements · Web · Mobile · Connected TV"
+    detail: "Paid Video · Entitlements · Web · Mobile · Connected TV",
   },
   {
     title: "Ideas into services",
