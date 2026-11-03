@@ -5,11 +5,11 @@ export default function Hero() {
   return (
     <section
       id="top"
-      className="relative flex flex-wrap items-center gap-10 pt-16 pb-24 md:pt-24 md:pb-32"
+      className="relative flex flex-wrap items-center gap-14 md:gap-10 pt-16 pb-16 md:pt-24 md:pb-32"
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-4 -right-6 font-display text-[260px] leading-[0.85] font-bold text-watermark select-none md:-right-10 md:text-[520px]"
+        className="pointer-events-none absolute right-0 bottom-[5rem] z-0 translate-y-1/4 font-display text-[290px] leading-[0.85] font-bold text-watermark select-none md:top-[-1rem] md:right-[-2.5rem] md:bottom-auto md:translate-y-0 md:text-[520px] min-[768px]:max-[839px]:bottom-[6rem] min-[768px]:max-[839px]:top-auto"
       >
         W
       </div>
@@ -52,7 +52,7 @@ export default function Hero() {
         width={176}
         height={176}
         priority
-        className="relative aspect-square w-32 rounded-full border-[6px] border-paper object-cover md:w-44"
+        className="relative z-10 ml-auto mt-4 aspect-square w-32 rounded-full border-[6px] border-paper object-cover md:ml-auto md:mt-0 md:w-44"
       />
     </section>
   );
