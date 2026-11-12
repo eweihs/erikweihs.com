@@ -16,6 +16,7 @@ It is a small site, but it is built and deployed the way I would set up a produc
 app/          routes, layout, metadata, icons and generated images
 components/   the page sections, from the hero to the contact footer
 public/       photos
+tests/        Playwright integration and visual tests
 ```
 
 ## Development
@@ -24,18 +25,23 @@ Requires Node.js 20.9 or later; the deploy workflow uses Node.js 24.
 
 ```bash
 npm ci
+npx playwright install chromium
 npm run dev
 ```
 
-| Command                | What it does                                |
-| ---------------------- | ------------------------------------------- |
-| `npm run build`        | Builds the static site into `out/`          |
-| `npm run check`        | Runs every check below; CI runs it on PRs   |
-| `npm run typecheck`    | Type-checks with `tsc`                      |
-| `npm run lint`         | Lints with the shared Next.js ESLint preset |
-| `npm run lint:unused`  | Finds unused files, exports and deps (knip) |
-| `npm run format`       | Formats with Prettier                       |
-| `npm run format:check` | Checks formatting without changing files    |
+| Command                      | What it does                                  |
+| ---------------------------- | --------------------------------------------- |
+| `npm run build`              | Builds the static site into `out/`            |
+| `npm run check`              | Runs every check but `test:visual`; CI on PRs |
+| `npm run typecheck`          | Type-checks with `tsc`                        |
+| `npm run lint`               | Lints with the shared Next.js ESLint preset   |
+| `npm run lint:unused`        | Finds unused files, exports and deps (knip)   |
+| `npm run format`             | Formats with Prettier                         |
+| `npm run format:check`       | Checks formatting without changing files      |
+| `npm run test:integration`   | Builds the site and runs the browser tests    |
+| `npm run test:visual`        | Compares screenshots with the local baseline  |
+| `npm run test:visual:update` | Saves a new local screenshot baseline         |
+| `npm run test:visual:report` | Opens the last Playwright report              |
 
 Set `ENV=prod` when building to include analytics, as production deploys do.
 
