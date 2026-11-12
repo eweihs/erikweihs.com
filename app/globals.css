@@ -37,3 +37,9 @@ body {
   outline-offset: 3px;
   border-radius: 2px;
 }
+
+/* The skip link focuses <main> only so the next Tab starts there; a ring around the whole
+   page would just be noise */
+#main-content:focus {
+  outline: none;
+}
