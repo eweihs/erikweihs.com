@@ -18,7 +18,7 @@ export default function Home() {
         Skip to content
       </a>
       <SiteHeader />
-      <main id="main-content">
+      <main id="main-content" tabIndex={-1}>
         <Container>
           <Hero />
           <About />
