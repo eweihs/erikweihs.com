@@ -12,7 +12,11 @@
     "lint:unused": "knip",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "npm run typecheck && npm run lint && npm run lint:unused && npm run format:check"
+    "test:integration": "playwright test --project=integration",
+    "test:visual": "playwright test --project=visual",
+    "test:visual:update": "playwright test --project=visual --update-snapshots",
+    "test:visual:report": "playwright show-report",
+    "check": "npm run typecheck && npm run lint && npm run lint:unused && npm run format:check && npm run test:integration"
   },
   "dependencies": {
     "next": "16.4.4",
@@ -21,6 +25,7 @@
   },
   "devDependencies": {
     "@eweihs/engineering-standards": "github:eweihs/engineering-standards#v3.1.0",
+    "@playwright/test": "^1.65.0",
     "@tailwindcss/postcss": "^4.1.8",
     "@types/node": "^22.15.29",
     "@types/react": "^19.3.0",

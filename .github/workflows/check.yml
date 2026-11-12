@@ -7,3 +7,5 @@ on:
 jobs:
   check:
     uses: eweihs/engineering-standards/.github/workflows/check.yml@v3.1.0
+    with:
+      playwright: true

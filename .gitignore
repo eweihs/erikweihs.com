@@ -16,3 +16,8 @@ out/
 .DS_Store
 Thumbs.db
 .idea/
+
+# Playwright; the visual baseline stays local, see testing.md
+test-results/
+playwright-report/
+tests/visual/**/*-snapshots/
