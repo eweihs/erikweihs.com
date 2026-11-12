@@ -17,7 +17,13 @@ for (const viewport of viewports) {
     for (const { name, path } of pages) {
       test(`${name} page`, async ({ page }) => {
         await page.goto(path);
-        await page.evaluate(() => document.fonts.ready);
+        // Load the lazy images below the fold, so the full-page shot doesn't depend on timing
+        await page.evaluate(async () => {
+          await document.fonts.ready;
+          const images = Array.from(document.images);
+          for (const image of images) image.loading = "eager";
+          await Promise.all(images.map((image) => image.decode()));
+        });
 
         await expect(page).toHaveScreenshot(`${name}-${viewport.name}.png`, { fullPage: true });
       });

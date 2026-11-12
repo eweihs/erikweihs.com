@@ -51,7 +51,7 @@ The workflow relies on the infra repo's stack names (`FrontendStackDev`, `Fronte
 
 `npm run check` runs `typecheck`, `lint`, `lint:unused`, `format:check` and `test:integration`. There is no pure logic worth a unit test, so there is no `test:unit` script.
 
-The Playwright tests run in Chromium against the static export, not the dev server: the `webServer` in `playwright.config.ts` runs `npm run build` and serves `out/` with `tests/serve-out.mjs`, which mimics CloudFront (clean URLs from `.html` files, `404.html` with a 404 status for anything else).
+The Playwright tests run in Chromium against the static export, not the dev server: the `webServer` in `playwright.config.ts` runs `npm run build` and serves `out/` with `tests/serve-out.mjs`, which copies the CloudFront viewer-request rewrite (an extensionless path gets `/index.html`, except the image routes) and answers a missing file with `404.html` and a 404 status. Keep it in step with the infra repo's function.
 
 - `tests/integration/` covers the home page sections, the skip link, the 404 page, `robots.txt`, `sitemap.xml`, and that `/opengraph-image` and `/logo` are exported as extensionless PNG files (see above)
 - `tests/visual/` screenshots the home and 404 pages at 375px and 1440px. The baseline is local and not committed: run `test:visual:update` on `main`, then `test:visual` on the branch

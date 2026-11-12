@@ -1,5 +1,5 @@
-// Serves the static export the way CloudFront does: a file as it is, a clean URL from its
-// .html file, and 404.html with a 404 status for anything else.
+// Serves the static export the way CloudFront does. The rewrite copies the viewer-request
+// function in lib/frontend-stack.ts in the infra repo; a missing file gets 404.html.
 import { readFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { extname, join, normalize } from "node:path";
@@ -18,6 +18,15 @@ const types = {
   ".xml": "application/xml",
 };
 
+const imageRoutes = ["/icon", "/opengraph-image", "/logo"];
+
+function rewrite(uri) {
+  if (imageRoutes.includes(uri)) return uri;
+  if (uri.endsWith("/")) return `${uri}index.html`;
+  if (!uri.slice(uri.lastIndexOf("/")).includes(".")) return `${uri}/index.html`;
+  return uri;
+}
+
 async function read(path) {
   try {
     return await readFile(join(root, path));
@@ -28,14 +37,12 @@ async function read(path) {
 }
 
 createServer(async (request, response) => {
-  const path = normalize(decodeURIComponent(new URL(request.url, "http://localhost").pathname));
-  for (const candidate of [path, `${path}.html`, join(path, "index.html")]) {
-    const body = await read(candidate);
-    if (body) {
-      response.writeHead(200, { "content-type": types[extname(candidate)] ?? "image/png" });
-      response.end(body);
-      return;
-    }
+  const path = rewrite(normalize(new URL(request.url, "http://localhost").pathname));
+  const body = await read(decodeURIComponent(path));
+  if (body) {
+    response.writeHead(200, { "content-type": types[extname(path)] ?? "image/png" });
+    response.end(body);
+    return;
   }
   response.writeHead(404, { "content-type": types[".html"] });
   response.end(await read("404.html"));
