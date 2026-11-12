@@ -47,6 +47,19 @@ Deploys only run in GitHub Actions, in `.github/workflows/deploy.yml`:
 
 The workflow relies on the infra repo's stack names (`FrontendStackDev`, `FrontendStackProd`), their `DistributionId` output and the `erik-weihs-website-<env>` buckets. It assumes the `erik-weihs-website-deploy-<env>` roles, which trust this repo by its numeric GitHub ID.
 
+## Checks
+
+`npm run check` runs `typecheck`, `lint`, `lint:unused` and `format:check`. The site has no tests yet, so there are no `test:unit` or `test:integration` scripts and `check` leaves them out; add them to `check` with the first test.
+
+## High-Risk Paths
+
+Treat changes to these as high risk in a pull request:
+
+- `.github/workflows/`
+- `.claude/settings.json`
+- `next.config.ts`, `tsconfig.json`, `eslint.config.mjs`, `knip.config.js`
+- `app/layout.tsx`, which loads the analytics script
+
 ## AWS Access for Claude Code
 
 Use the `erikweihs-claude-readonly` profile for read-only checks: CloudFormation stack status, CloudWatch logs, CloudFront distributions and invalidations, and listing the site buckets. It can't read IAM or bucket contents.

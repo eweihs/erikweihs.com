@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/node_modules/@eweihs/engineering-standards/claude/check-on-stop.js\"",
+            "timeout": 900
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -9,7 +9,7 @@ It is a small site, but it is built and deployed the way I would set up a produc
 - **[Next.js 16](https://nextjs.org/)** with the App Router and `output: "export"`, so `next build` produces plain static files in `out/`
 - **TypeScript** and **[Tailwind CSS v4](https://tailwindcss.com/)**, with the brand colours as theme tokens in `app/globals.css`
 - **Generated images**: the Open Graph image and logo are rendered at build time from `app/opengraph-image.tsx` and `app/logo/route.tsx`
-- **Shared standards**: lint, formatting and TypeScript settings come from [`@eweihs/engineering-standards`](https://github.com/eweihs/engineering-standards)
+- **Shared standards**: lint, dead-code, formatting and TypeScript settings, plus the CI check, come from [`@eweihs/engineering-standards`](https://github.com/eweihs/engineering-standards)
 - **Privacy-friendly analytics** with [Umami](https://umami.is/), only in the production build
 
 ```txt
@@ -30,7 +30,10 @@ npm run dev
 | Command                | What it does                                |
 | ---------------------- | ------------------------------------------- |
 | `npm run build`        | Builds the static site into `out/`          |
+| `npm run check`        | Runs every check below; CI runs it on PRs   |
+| `npm run typecheck`    | Type-checks with `tsc`                      |
 | `npm run lint`         | Lints with the shared Next.js ESLint preset |
+| `npm run lint:unused`  | Finds unused files, exports and deps (knip) |
 | `npm run format`       | Formats with Prettier                       |
 | `npm run format:check` | Checks formatting without changing files    |
 
