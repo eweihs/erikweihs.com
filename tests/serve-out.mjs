@@ -2,7 +2,7 @@
 // function in lib/frontend-stack.ts in the infra repo; a missing file gets 404.html.
 import { readFile } from "node:fs/promises";
 import { createServer } from "node:http";
-import { extname, join, normalize } from "node:path";
+import { extname, join, normalize, resolve, sep } from "node:path";
 
 const root = join(import.meta.dirname, "..", "out");
 const port = Number(process.argv[2] ?? 4173);
@@ -37,8 +37,19 @@ async function read(path) {
 }
 
 createServer(async (request, response) => {
-  const path = rewrite(normalize(new URL(request.url, "http://localhost").pathname));
-  const body = await read(decodeURIComponent(path));
+  let path;
+  try {
+    path = rewrite(
+      normalize(decodeURIComponent(new URL(request.url, "http://localhost").pathname)),
+    );
+  } catch (error) {
+    if (!(error instanceof URIError)) throw error;
+    response.writeHead(400);
+    response.end();
+    return;
+  }
+  // Never read outside out/, even for a path with encoded dots
+  const body = resolve(root, `.${path}`).startsWith(root + sep) ? await read(path) : null;
   if (body) {
     response.writeHead(200, { "content-type": types[extname(path)] ?? "image/png" });
     response.end(body);
