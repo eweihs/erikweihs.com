@@ -1,0 +1,9 @@
+name: Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  check:
+    uses: eweihs/engineering-standards/.github/workflows/check.yml@v3.1.0
