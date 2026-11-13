@@ -11,9 +11,10 @@ Before making changes, read:
 5. `node_modules/@eweihs/engineering-standards/guidelines/agents.md`
 6. `node_modules/@eweihs/engineering-standards/guidelines/pull-requests.md`
 7. `node_modules/@eweihs/engineering-standards/guidelines/testing.md`
-8. `node_modules/@eweihs/engineering-standards/guidelines/components.md`
-9. `node_modules/@eweihs/engineering-standards/guidelines/hooks.md`
-10. `node_modules/@eweihs/engineering-standards/guidelines/styling.md`
+8. `node_modules/@eweihs/engineering-standards/guidelines/releases.md`
+9. `node_modules/@eweihs/engineering-standards/guidelines/components.md`
+10. `node_modules/@eweihs/engineering-standards/guidelines/hooks.md`
+11. `node_modules/@eweihs/engineering-standards/guidelines/styling.md`
 
 Run `npm ci` first if `node_modules` is missing.
 

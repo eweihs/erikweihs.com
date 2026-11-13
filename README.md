@@ -50,7 +50,9 @@ Set `ENV=prod` when building to include analytics, as production deploys do.
 [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) builds the site, uploads it to S3 and invalidates the CloudFront cache.
 
 - Every push to `main` deploys to a password-protected dev site.
-- **Run workflow** in the Actions tab deploys any branch to dev, or `main` to production.
+- Production only runs tagged releases: pushing a `v*` tag, created with `npm version`, deploys it.
+- **Run workflow** in the Actions tab deploys any branch to dev, or a release tag to production, which is how a rollback works.
+- `/version.txt` shows which release or commit a site is running.
 - The workflow signs in to AWS with GitHub's OIDC tokens, so no AWS credentials are stored in GitHub. The only setting it needs is the repository variable `AWS_ACCOUNT_ID`.
 
 The AWS infrastructure (S3, CloudFront, certificates and the deploy roles) is defined with CDK in a separate private repository.
