@@ -43,9 +43,26 @@ The build reads `ENV` (`dev` or `prod`). Umami analytics is only included when `
 Deploys only run in GitHub Actions, in `.github/workflows/deploy.yml`:
 
 - Every push to `main` deploys to dev.
-- **Run workflow** deploys any branch to dev, or `main` to prod.
+- Pushing a `v*` tag deploys that release to prod.
+- **Run workflow** deploys any branch or tag to dev, or a release tag to prod, which is how to roll back.
+
+Prod refuses to deploy anything but a tag that equals `v` plus the `version` in `package.json`. The infra repo enforces the same: the prod deploy role only trusts runs on `v*` tags.
 
 The workflow relies on the infra repo's stack names (`FrontendStackDev`, `FrontendStackProd`), their `DistributionId` output and the `erik-weihs-website-<env>` buckets. It assumes the `erik-weihs-website-deploy-<env>` roles, which trust this repo by its numeric GitHub ID.
+
+`/version.txt` shows what an environment runs: the tag in prod, the commit in dev and `local` in a local build.
+
+## Releases
+
+Follow the shared release guideline. For this site:
+
+1. Merge to `main`; the push deploys it to dev.
+2. Check the dev site, and that `https://dev.erikweihs.com/version.txt` shows the commit. There is no `test:e2e`, because the site has no backend. Run `test:visual` on that commit against a baseline from the previous release.
+3. On that commit of `main`, run `npm version <major|minor|patch> -m "chore(release): %s"`. Its `postversion` script runs `git push --follow-tags`, which pushes the release commit and the tag. A person does this: the tag is the decision to release.
+4. The tag push deploys to prod. Check that `https://erikweihs.com/version.txt` shows the tag.
+5. Create the GitHub release with `gh release create "v$(node -p "require('./package.json').version")" --verify-tag --generate-notes`, and edit the notes into Features and Fixes.
+
+To roll back, run the Deploy workflow from the previous tag with `prod`, then fix forward with a new patch release.
 
 ## Checks
 
@@ -60,7 +77,7 @@ The Playwright tests run in Chromium against the static export, not the dev serv
 
 Treat changes to these as high risk in a pull request:
 
-- `.github/workflows/`
+- `.github/workflows/`, especially `deploy.yml`, which decides what reaches prod
 - `.claude/settings.json`
 - `next.config.ts`, `tsconfig.json`, `eslint.config.mjs`, `knip.config.js`
 - `app/layout.tsx`, which loads the analytics script

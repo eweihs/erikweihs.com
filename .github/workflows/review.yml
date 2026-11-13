@@ -10,6 +10,6 @@ jobs:
       contents: read
       pull-requests: write
       id-token: write
-    uses: eweihs/engineering-standards/.github/workflows/review.yml@v3.1.0
+    uses: eweihs/engineering-standards/.github/workflows/review.yml@v3.1.2
     secrets:
       CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}

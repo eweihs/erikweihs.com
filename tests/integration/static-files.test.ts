@@ -21,6 +21,13 @@ test("serves robots.txt pointing at the sitemap", async ({ request }) => {
   expect(await response.text()).toContain("Sitemap: https://erikweihs.com/sitemap.xml");
 });
 
+test("serves the release the build was made from", async ({ request }) => {
+  const response = await request.get("/version.txt");
+
+  expect(response.status()).toBe(200);
+  expect(await response.text()).toBe("local\n");
+});
+
 test("serves a sitemap listing the home page", async ({ request }) => {
   const response = await request.get("/sitemap.xml");
 
