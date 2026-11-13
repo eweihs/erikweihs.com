@@ -58,7 +58,7 @@ Follow the shared release guideline. For this site:
 
 1. Merge to `main`; the push deploys it to dev.
 2. Check the dev site, and that `https://dev.erikweihs.com/version.txt` shows the commit. There is no `test:e2e`, because the site has no backend. Run `test:visual` on that commit against a baseline from the previous release.
-3. On that commit of `main`, run `npm version <major|minor|patch> -m "chore(release): %s"` and `git push --follow-tags`. A person does this: the tag is the decision to release.
+3. On that commit of `main`, run `npm version <major|minor|patch> -m "chore(release): %s"`. Its `postversion` script runs `git push --follow-tags`, which pushes the release commit and the tag. A person does this: the tag is the decision to release.
 4. The tag push deploys to prod. Check that `https://erikweihs.com/version.txt` shows the tag.
 5. Create the GitHub release with `gh release create "v$(node -p "require('./package.json').version")" --verify-tag --generate-notes`, and edit the notes into Features and Fixes.
 
