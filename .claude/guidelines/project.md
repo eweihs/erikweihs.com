@@ -46,7 +46,7 @@ Deploys only run in GitHub Actions, in `.github/workflows/deploy.yml`:
 - Pushing a `v*` tag deploys that release to prod.
 - **Run workflow** deploys any branch or tag to dev, or a release tag to prod, which is how to roll back.
 
-Prod refuses to deploy anything but a tag that equals `v` plus the `version` in `package.json`. The infra repo enforces the same: the prod deploy role only trusts runs on `v*` tags.
+Prod refuses to deploy anything but a tag that equals `v` plus the `version` in `package.json`. GitHub and AWS enforce the same: each deploy runs in the GitHub environment `dev` or `production`, `production` only accepts `v*` tags, and each deploy role in the infra repo only trusts its own environment. Both environments are set up in the repository settings.
 
 The workflow relies on the infra repo's stack names (`FrontendStackDev`, `FrontendStackProd`), their `DistributionId` output and the `erik-weihs-website-<env>` buckets. It assumes the `erik-weihs-website-deploy-<env>` roles, which trust this repo by its numeric GitHub ID.
 
