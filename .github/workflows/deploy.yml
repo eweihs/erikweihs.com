@@ -1,7 +1,7 @@
 name: Deploy
 
 # A push to main deploys to dev. A pushed v* tag deploys that release to prod.
-# Run workflow deploys any branch to dev, or a release tag to prod (for a rollback).
+# Run workflow deploys any branch or tag to dev, or a release tag to prod (for a rollback).
 on:
   push:
     branches: [main]

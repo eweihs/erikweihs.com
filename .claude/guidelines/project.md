@@ -44,7 +44,7 @@ Deploys only run in GitHub Actions, in `.github/workflows/deploy.yml`:
 
 - Every push to `main` deploys to dev.
 - Pushing a `v*` tag deploys that release to prod.
-- **Run workflow** deploys any branch to dev, or a release tag to prod, which is how to roll back.
+- **Run workflow** deploys any branch or tag to dev, or a release tag to prod, which is how to roll back.
 
 Prod refuses to deploy anything but a tag that equals `v` plus the `version` in `package.json`. The infra repo enforces the same: the prod deploy role only trusts runs on `v*` tags.
 

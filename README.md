@@ -51,7 +51,7 @@ Set `ENV=prod` when building to include analytics, as production deploys do.
 
 - Every push to `main` deploys to a password-protected dev site.
 - Production only runs tagged releases: pushing a `v*` tag, created with `npm version`, deploys it.
-- **Run workflow** in the Actions tab deploys any branch to dev, or a release tag to production, which is how a rollback works.
+- **Run workflow** in the Actions tab deploys any branch or tag to dev, or a release tag to production, which is how a rollback works.
 - `/version.txt` shows which release or commit a site is running.
 - The workflow signs in to AWS with GitHub's OIDC tokens, so no AWS credentials are stored in GitHub. The only setting it needs is the repository variable `AWS_ACCOUNT_ID`.
 
