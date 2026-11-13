@@ -24,7 +24,7 @@
     "react-dom": "^19.3.1"
   },
   "devDependencies": {
-    "@eweihs/engineering-standards": "github:eweihs/engineering-standards#v3.1.0",
+    "@eweihs/engineering-standards": "github:eweihs/engineering-standards#v3.1.2",
     "@playwright/test": "^1.65.0",
     "@tailwindcss/postcss": "^4.1.8",
     "@types/node": "^22.15.29",
