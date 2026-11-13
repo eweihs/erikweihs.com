@@ -25,6 +25,10 @@ jobs:
   deploy:
     name: Deploy ${{ github.ref_name }}
     runs-on: ubuntu-latest
+    # The GitHub environment decides which runs may deploy: its name is in the OIDC token,
+    # and each AWS deploy role trusts only its own environment (erikweihs-shared-infra).
+    # production only accepts v* tags.
+    environment: ${{ (github.event_name == 'push' && github.ref_type == 'tag' || inputs.environment == 'prod') && 'production' || 'dev' }}
     concurrency:
       group: deploy-${{ github.event_name == 'push' && github.ref_type == 'tag' && 'prod' || inputs.environment || 'dev' }}
     env:
