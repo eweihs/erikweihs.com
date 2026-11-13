@@ -1,12 +1,15 @@
 name: Deploy
 
+# A push to main deploys to dev. A pushed v* tag deploys that release to prod.
+# Run workflow deploys any branch to dev, or a release tag to prod (for a rollback).
 on:
   push:
     branches: [main]
+    tags: ["v*"]
   workflow_dispatch:
     inputs:
       environment:
-        description: Environment to deploy
+        description: Environment to deploy (prod only runs from a tag)
         type: choice
         options: [dev, prod]
         default: dev
@@ -15,21 +18,36 @@ permissions:
   id-token: write
   contents: read
 
-concurrency:
-  group: deploy-${{ inputs.environment || 'dev' }}
+env:
+  DEPLOY_ENV: ${{ github.event_name == 'push' && github.ref_type == 'tag' && 'prod' || inputs.environment || 'dev' }}
 
 jobs:
   deploy:
-    name: Deploy to ${{ inputs.environment || 'dev' }}
+    name: Deploy ${{ github.ref_name }}
     runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-${{ github.event_name == 'push' && github.ref_type == 'tag' && 'prod' || inputs.environment || 'dev' }}
     env:
-      DEPLOY_ENV: ${{ inputs.environment || 'dev' }}
-      BUCKET: erik-weihs-website-${{ inputs.environment || 'dev' }}
-      STACK: ${{ inputs.environment == 'prod' && 'FrontendStackProd' || 'FrontendStackDev' }}
+      BUCKET: erik-weihs-website-${{ github.event_name == 'push' && github.ref_type == 'tag' && 'prod' || inputs.environment || 'dev' }}
+      STACK: ${{ (github.event_name == 'push' && github.ref_type == 'tag' || inputs.environment == 'prod') && 'FrontendStackProd' || 'FrontendStackDev' }}
       # HTML and other unhashed files are cached by CloudFront until the next invalidation
       REVALIDATE: public, max-age=0, s-maxage=31536000, must-revalidate
     steps:
       - uses: actions/checkout@v7
+
+      # Prod only runs a release tag that matches package.json; see the release guideline
+      - name: Check the release tag
+        if: env.DEPLOY_ENV == 'prod'
+        run: |
+          version="v$(node -p "require('./package.json').version")"
+          if [ "$GITHUB_REF_TYPE" != "tag" ]; then
+            echo "::error::Prod only deploys a release tag, not the branch $GITHUB_REF_NAME"
+            exit 1
+          fi
+          if [ "$GITHUB_REF_NAME" != "$version" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match $version in package.json"
+            exit 1
+          fi
 
       - uses: actions/setup-node@v7
         with:
@@ -42,6 +60,8 @@ jobs:
         run: npm run build
         env:
           ENV: ${{ env.DEPLOY_ENV }}
+          # Shown at /version.txt: the tag in prod, the commit elsewhere
+          RELEASE: ${{ github.ref_type == 'tag' && github.ref_name || github.sha }}
 
       - uses: aws-actions/configure-aws-credentials@v6
         with:
